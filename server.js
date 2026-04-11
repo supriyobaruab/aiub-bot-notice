@@ -40,7 +40,7 @@ async function getInformation() {
       let latestNotice = await scrap();
       // console.log(latestNotice);
       // console.log(lastNotice);
-      if (lastNotice.title == latestNotice.title) {
+      if (lastNotice.title != latestNotice.title) {
         // console.log(true);
         sendNotification(client, latestNotice);
       }
