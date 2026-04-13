@@ -34,15 +34,20 @@ const scrap = async () => {
 
 async function getInformation() {
   lastNotice = await scrap();
-
+  console.log("CHECKED THE INITIAL NOTICE");
   setInterval(
     async () => {
       let latestNotice = await scrap();
       // console.log(latestNotice);
       // console.log(lastNotice);
+      console.log("CHECKING FOR NEW NOTICES");
       if (lastNotice.title != latestNotice.title) {
-        // console.log(true);
+        console.log("RESULT OF COMPARING NOTICES RETURNS");
+        console.log(true);
         sendNotification(client, latestNotice);
+      } else {
+        console.log("RESULT OF COMPARING NOTICES RETURNS");
+        console.log(true);
       }
     },
     10 * 60 * 1000,
@@ -50,4 +55,6 @@ async function getInformation() {
 }
 
 getInformation();
-app.listen(3000);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running at port ${process.env.PORT}`);
+});
