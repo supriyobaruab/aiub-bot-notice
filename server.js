@@ -1,10 +1,11 @@
 const express = require("express");
 const { chromium } = require("playwright");
-const { client, startBot } = require("./routes/bot");
-const { sendNotification } = require("./routes/notify");
+const { client, startBot } = require("./components/bot");
+const { sendNotification } = require("./components/notify");
+const { saveText, readText } = require("./components/ionotices");
 
 const app = express();
-let lastNotice = null;
+
 const scrap = async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -33,21 +34,26 @@ const scrap = async () => {
 };
 
 async function getInformation() {
-  lastNotice = await scrap();
-  console.log("CHECKED THE INITIAL NOTICE");
+  let lastNotice = readText();
+
+  if (!lastNotice) {
+    lastNotice = await scrap();
+    saveText(lastNotice);
+    console.log("INITIAL NOTICE SAVED");
+  }
   setInterval(
     async () => {
       let latestNotice = await scrap();
-      // console.log(latestNotice);
-      // console.log(lastNotice);
+
       console.log("CHECKING FOR NEW NOTICES");
-      if (lastNotice.title != latestNotice.title) {
-        console.log("RESULT OF COMPARING NOTICES RETURNS");
-        console.log(true);
+
+      if (latestNotice && lastNotice?.title !== latestNotice.title) {
+        console.log("NEW NOTICE FOUND");
         sendNotification(client, latestNotice);
+        saveText(latestNotice);
+        lastNotice = latestNotice;
       } else {
-        console.log("RESULT OF COMPARING NOTICES RETURNS");
-        console.log(true);
+        console.log("NO NEW NOTICE");
       }
     },
     10 * 60 * 1000,
