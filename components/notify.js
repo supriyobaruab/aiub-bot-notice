@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require("discord.js");
 require("dotenv").config();
 const { client, startBot } = require("./bot");
+const msgLogger = require("./msgLogger");
 const sendNotification = async (client, data) => {
   try {
     await startBot(process.env.TOKEN);
@@ -32,8 +33,10 @@ const sendNotification = async (client, data) => {
     await channel.send({ embeds: [embed] });
 
     console.log("Notification sent");
+    msgLogger("Notification sent");
   } catch (err) {
     console.error("Error:", err);
+    msgLogger("Error:", err);
   }
 };
 // sendNotification(client);

@@ -3,6 +3,7 @@ const { chromium } = require("playwright");
 const { client, startBot } = require("./components/bot");
 const { sendNotification } = require("./components/notify");
 const { saveText, readText } = require("./components/ionotices");
+const msgLogger = require("./components/msgLogger");
 
 const app = express();
 
@@ -46,14 +47,18 @@ async function getInformation() {
       let latestNotice = await scrap();
 
       console.log("CHECKING FOR NEW NOTICES");
+      msgLogger("CHECKING FOR NEW NOTICES");
 
       if (latestNotice && lastNotice?.title !== latestNotice.title) {
         console.log("NEW NOTICE FOUND");
+        msgLogger("NEW NOTICE FOUND");
+
         sendNotification(client, latestNotice);
         saveText(latestNotice);
         lastNotice = latestNotice;
       } else {
         console.log("NO NEW NOTICE");
+        msgLogger("NO NEW NOTICE");
       }
     },
     10 * 60 * 1000,
