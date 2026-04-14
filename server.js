@@ -41,6 +41,7 @@ async function getInformation() {
     lastNotice = await scrap();
     saveText(lastNotice);
     console.log("INITIAL NOTICE SAVED");
+    msgLogger("INITIAL NOTICE SAVED");
   }
   setInterval(
     async () => {
