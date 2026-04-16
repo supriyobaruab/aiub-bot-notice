@@ -10,7 +10,7 @@ const app = express();
 const scrap = async () => {
   let browser;
   try {
-    browser = await chromium.launch({ headless: false });
+    browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
 
     await page.goto("https://www.aiub.edu/category/notices", {
