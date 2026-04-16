@@ -4,6 +4,9 @@ const path = require("path");
 const filepath = path.join(__dirname, "notices", "lastNotice.json");
 
 function saveText(data) {
+  if (!data || !data.title) {
+    return;
+  }
   fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
 }
 
